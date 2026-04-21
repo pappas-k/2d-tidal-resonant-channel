@@ -92,8 +92,6 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     # plot(bathymetry_2d)
     # plt.show()
 
-
-
     """
     Create Thetis solver object
     """

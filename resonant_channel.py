@@ -33,8 +33,8 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     :return:
     """
 
-    #T = 12.42 * 3600             # M2 tidal period
-    T= 2*3600                    # We define a hypothetical period to make out domain smaller and the model faster
+    #T = 12.42 * 3600              # M2 tidal period
+    T = 2 * 3600                  # hypothetical period — smaller domain, faster model
     H = 50                       # Bathymetry (m)
     L = T * math.sqrt(9.81 * H)  # Wavelength L (m) based on celerity math.sqrt(9.81 * H)
     print("Wavelength L = ", L)

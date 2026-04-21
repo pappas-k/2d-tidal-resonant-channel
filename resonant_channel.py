@@ -77,15 +77,15 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     viscosity_2d = Function(P1_2d, name='viscosity')
 
     x, y = SpatialCoordinate(mesh2d)
-    #Define constant bathymetry:
-    bathymetry_2d.assign(Constant(H))  # here we define a constant bathymetry of 50m
+    # Define constant bathymetry:
+    bathymetry_2d.assign(Constant(H))  # constant bathymetry of 50 m
 
-    #Define sloping bathymetry:
+    # Define sloping bathymetry:
     depth_oce = 50.0
     depth_riv = 5.0
     #bathymetry_2d.interpolate(depth_oce + (depth_riv - depth_oce) * x / lx)
 
-    #Viscocity sponge:
+    # Viscosity sponge:
     viscosity_2d.interpolate(conditional(le(x, 2e3), 1e3 * (2e3 + 1 - x) / 2e3, 1)) #we define a viscosity sponge for x<=2000m, i.e. viscosity = 1e3 * (2e3+1 - x)/2e3, for x>2000m Viscosity=1
 
     # Uncomment to produce a plot for the bathymetry

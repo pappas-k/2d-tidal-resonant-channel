@@ -1,6 +1,6 @@
 """
 *Simulation of a resonant channel in Thetis
-*This is a script put together by Kostnstantinos Pappas as part of his Meng thesis at UoE (2020) 
+*This is a script put together by Konstantinos Pappas as part of his Meng thesis at UoE (2020)
 *Notes on running a hydrodynamic model and conduct a sensitivity study based on the Manning number used
 to represent bed friction
 

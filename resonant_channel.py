@@ -106,7 +106,6 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     options.fields_to_export = ['uv_2d', 'elev_2d']
     options.fields_to_export_hdf5 = ['uv_2d', 'elev_2d']
     options.manning_drag_coefficient = Constant(mu_manning)
-    #options.timestepper_type = 'CrankNicolson'
     options.swe_timestepper_type = 'CrankNicolson'
     options.timestep = 50.0
     options.use_wetting_and_drying = True

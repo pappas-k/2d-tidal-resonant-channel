@@ -38,7 +38,6 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     H = 50                       # Bathymetry (m)
     L = T * math.sqrt(9.81 * H)  # Wavelength L (m) based on celerity math.sqrt(9.81 * H)
     print("Wavelength L = ", L)
-    L_res = L / 4                # Resonant channel length (Merian's formula with 1 node)
     lx = 30000  # L/5.5          # Channel length; take approx lx=L/5.5
     W = 2000                     # Channel width (m)
     w = 2 * math.pi / T          # Angular frequency

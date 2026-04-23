@@ -30,8 +30,6 @@ from matplotlib import rc
 
 rc('font', **{'family': 'sans-serif', 'sans-serif': ['Helvetica'], 'size': 18})
 rc('text', usetex=True)
-plt.rc('text', usetex=True)
-plt.rc('font', family='serif')
 
 
 

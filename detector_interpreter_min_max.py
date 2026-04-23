@@ -82,9 +82,6 @@ if __name__ == '__main__':
     n_cases = [0.02, 0.03]                    #Manning coefficient n cases to be considered
     H_cases = [45,47.5,48.5,49.5,50,52.5,55]  #Depth H cases to be considered
 
-    #for n in n_cases:
-        #dataframes.append(h5py.File('outputs-n-' + str(i) + '/diagnostic_detectors.hdf5', 'r'))
-
     n=0.02
     for H in H_cases:
         dataframes.append(h5py.File('outputs' + "-" + "n-" + str(n) + "-" + "H-" + str(H) + '/diagnostic_detectors.hdf5', 'r'))

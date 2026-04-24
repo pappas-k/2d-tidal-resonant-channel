@@ -1,11 +1,25 @@
 """
-Plotting script for resonant channel
+Detector interpreter for the 2D tidal resonant channel simulations.
 Written by Konstantinos Pappas, Edited by Thanasis Angeloudis.
-#------------------How to run the script-------------
-#1) change the number of detectors depending on the length of channel
-#2) choose the range number bellow dir, depending on how many iterations based on manning coefficients conducted
-#3) change q to get results after a certain period
-#4) run the script, the results are extracted in minMax.csv file
+
+This script reads the HDF5 diagnostic detector output produced by Thetis for
+a set of 2D shallow-water channel simulations and extracts, for each detector
+location along the channel, the maximum and minimum water surface elevation
+over a chosen time window.  The results are appended to a CSV file
+(min_max.csv) for post-processing and further plotting.
+
+For the detector at the closed end of the channel the script also generates
+a five-panel time-series plot showing: surface elevation (eta), longitudinal
+velocity (u), transverse velocity (v), flow speed (|U|), and flow direction
+(alpha).
+
+How to run
+----------
+1. Set N_detectors to match the number of detectors used in the simulation.
+2. Set n_cases / H_cases to the Manning coefficient and depth values that
+   were simulated.
+3. Set q to skip the initial spin-up period (number of timesteps to discard).
+4. Run the script; results are written to min_max.csv.
 """
 import h5py
 import numpy as np

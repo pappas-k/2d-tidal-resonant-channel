@@ -13,7 +13,6 @@ import matplotlib.pyplot as plt
 from matplotlib import rc
 import csv
 
-rc('font', **{'family': 'sans-serif', 'sans-serif': ['Helvetica']})
 rc('text', usetex=True)
 plt.rc('text', usetex=True)
 plt.rc('font', family='serif')
@@ -44,7 +43,7 @@ def process_results(df, names, xcoord, index, color='k', label='$\\nu = 0.02$'):
     """
     with open("min_max.csv", "a") as file:
         file1 = csv.writer(file)
-        file1.writerow([j,xcoord,eta.max(), eta.min()])
+        file1.writerow([index, xcoord, eta.max(), eta.min()])
 
     """
     Plot

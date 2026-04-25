@@ -49,11 +49,5 @@ for j in np.arange(0,len(H_cases)):
     plt.plot(df['xcoord'][0:21] / lx, df['eta_max'][i:i+21], label=H_labels[j], color=colors[j], lw=linewidth)
     plt.plot(df['xcoord'][0:21] / lx, df['eta_min'][i:i + 21], color=colors[j], lw=linewidth)
 
-
-# plt.plot(df['xcoord'][0:21]/lx,df['eta_max'][0:21])
-# plt.plot(df['xcoord'][0:21]/lx,df['eta_min'][0:21])
-#
-# plt.plot(df['xcoord'][21:42]/lx,df['eta_max'][21:42])
-# plt.plot(df['xcoord'][21:42]/lx,df['eta_min'][21:42])
 plt.legend()
 plt.show()

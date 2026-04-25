@@ -28,7 +28,6 @@ from matplotlib import rc
 import csv
 
 rc('text', usetex=True)
-plt.rc('text', usetex=True)
 plt.rc('font', family='serif')
 
 

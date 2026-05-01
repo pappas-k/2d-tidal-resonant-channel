@@ -1,23 +1,24 @@
 """
-*Simulation of a resonant channel in Thetis
-*This is a script put together by Konstantinos Pappas as part of his Meng thesis at UoE (2020)
-*Notes on running a hydrodynamic model and conduct a sensitivity study based on the Manning number used
-to represent bed friction
+Simulation of a resonant channel in Thetis.
 
-#1) Start by running the gmsh_generator.py to create a mesh of desired resolution and shape
-#2) Choose the manning bellow to include manning coefficients for iteration
-#3) Insert period T, depth H , channel length lx, amplitude
-#4) Choose the total duration t_end
-#5) Define bathymetry, same as H   (bathymetry_2d.assign(Constant(50.0))
-#6) Define viscosity if the model becomes unstable close to the boundaries,
-#7) Define timestep Dt, (options.timestep = 50.0)
-#8) Define the side of the domain for inflow , (the side the open boundary is expected) (solver_obj.bnd_functions)
-#8) Define the coordinates of detectors (below specified every 10000 m) based on lx
-#9)  Run this script
-#10) Run the detector_intepreter_minmax_sanz.py to extract the min, max values corresponding to detectors, or run
-     detector_interpreter_one_detector to see the graph of relative detector
-#11) run plotter to see results (for, length, friction, depth, etc.)
+Script by Konstantinos Pappas (MEng thesis, UoE 2020). Runs a 2D shallow-water
+model and conducts a sensitivity study based on the Manning bed-friction
+coefficient.
 
+How to run
+----------
+1. Run gmsh_generator.py to create a mesh of the desired resolution and shape.
+2. Choose the Manning coefficients for iteration.
+3. Set period T, depth H, channel length lx, and forcing amplitude.
+4. Choose the total duration t_end.
+5. Define bathymetry (bathymetry_2d.assign(Constant(H))).
+6. Define viscosity if the model becomes unstable near the boundaries.
+7. Define timestep Dt (options.timestep = 50.0).
+8. Define the open-boundary side of the domain (solver_obj.bnd_functions).
+9. Define detector coordinates (below: equidistant points along lx).
+10. Run this script.
+11. Run detector_interpreter_min_max.py to extract min/max detector values.
+12. Run the plotter to view results (length, friction, depth, etc.).
 """
 import numpy as np
 from thetis import *

@@ -51,16 +51,12 @@ def process_results(df, names, xcoord, index, color='k', label='$\\nu = 0.02$'):
 
     print('x-coordinate, max , min :', "{:.1f}".format(xcoord), "{:.3f}".format(eta.max()), "{:.3f}".format(eta.min()))
 
-    """
-    Maxima and minima - outputing these to a csv file for further plotting
-    """
+    # Write maxima and minima to CSV for further plotting
     with open("min_max.csv", "a") as file:
         file1 = csv.writer(file)
         file1.writerow([index, xcoord, eta.max(), eta.min()])
 
-    """
-    Plot
-    """
+    # Plot time series at the closed end
     if j == N_detectors-1:
         # Plot initialisation
         linewidth = 0.2
@@ -94,13 +90,13 @@ if __name__ == '__main__':
     n_cases = [0.02, 0.03]                    #Manning coefficient n cases to be considered
     H_cases = [45,47.5,48.5,49.5,50,52.5,55]  #Depth H cases to be considered
 
-    n=0.02
+    n = 0.02
     for H in H_cases:
         dataframes.append(h5py.File('outputs' + "-" + "n-" + str(n) + "-" + "H-" + str(H) + '/diagnostic_detectors.hdf5', 'r'))
 
     # Create a list of detector names (follows on the notation used in the simulation)
-    names=[]
-    N_detectors = len(list(dataframes[0].keys()))-1
+    names = []
+    N_detectors = len(list(dataframes[0].keys())) - 1
     print("Number of Detectors:", N_detectors)
     for k in range(0, N_detectors):
         names.append('detector_'+str(k))

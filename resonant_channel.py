@@ -52,9 +52,7 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     forcing_amplitude = eta(T/4)  # calculate at pi/4
     print("forcing_amplitude=", forcing_amplitude)
 
-    """
-    Simulation parameters
-    """
+    # Simulation parameters
     # Output folder
     outputdir = 'outputs' + "-" + "n-" + str(mu_manning) + "-" + "H-" + str(H)
     # Mesh for simulation
@@ -68,9 +66,7 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     # export interval in seconds
     t_export = 1000.0
 
-    """
-    Bathymetry and viscosity fields
-    """
+    # Bathymetry and viscosity fields
     P1_2d = FunctionSpace(mesh2d, 'CG', 1)
     DG_2d = FunctionSpace(mesh2d, 'DG', 1)
     bathymetry_2d = Function(P1_2d, name='Bathymetry')
@@ -92,9 +88,7 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     # plot(bathymetry_2d)
     # plt.show()
 
-    """
-    Create Thetis solver object
-    """
+    # Create Thetis solver object
     solver_obj = solver2d.FlowSolver2d(mesh2d, bathymetry_2d)
     options = solver_obj.options
     options.simulation_export_time = t_export
@@ -112,9 +106,7 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     #     options.timestep = 10.0
 
 
-    """
-    Boundary and initial conditions
-    """
+    # Boundary and initial conditions
     tidal_elev = Constant(0)
     solver_obj.bnd_functions['shallow_water'] = {4: {'elev': tidal_elev}}
 
@@ -122,9 +114,7 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     elev_init = Function(P1_2d)
     elev_init.assign(0.0)
 
-    """
-    Detectors
-    """
+    # Detectors
     # Get equidistant points to monitor across the centreline
     detectors_coordinates = support_functions.get_equidistant_points((0,W), (lx-1e-3,W),20)
 
@@ -133,46 +123,28 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
         det_names.append('detector_' + str(i))
     print(det_names,detectors_coordinates)
 
-
-    """
-    Create a tidal elevation function to be used for the open boundary during the run
-    """
+    # Create a tidal elevation function for the open boundary
     tidal_elevation = support_functions.sinusoidal_tidal_elevation(amplitude=forcing_amplitude)
 
-
-    """
-    Assign initial conditions
-    """
+    # Assign initial conditions
     solver_obj.assign_initial_conditions(elev=elev_init, uv=as_vector((1e-3, 0.0))) # Small velocity value (1e-3) is used to avoid division by 0 if friction term is included
 
-
-    """
-    Adding detectors:  (Detectors are monitor points for elevations and velocities)
-    """
+    # Add detector callbacks (monitor points for elevations and velocities)
     cb = DetectorsCallback(solver_obj, detectors_coordinates, ['elev_2d', 'uv_2d'],
                            name='detectors',
                            detector_names=det_names)
     solver_obj.add_callback(cb, 'timestep')
     uv, elev = solver_obj.timestepper.solution.split()
 
-
-    """
-    Output the maximum values at the end of the run
-    """
+    # Track maximum and minimum field elevations
     maximum_elevation = Function(DG_2d, name='Maximum_elevation_'+str(mu_manning)).assign(0.0)
     minimum_elevation = Function(DG_2d, name='Minimum_elevation_'+str(mu_manning)).assign(0.0)
 
-    """
-    Update_forcings: function called between timesteps to update boundary conditions and as route for intermediate
-    calculations and operations
-    """
     def update_forcings(t_new):
         ramp = tanh(t_new / 10000.)
         tidal_elev.assign(Constant(tidal_elevation(t_new) * ramp))
 
-        """
-        Monitor maximum and minimum elevations after a certain time 
-        """
+        # Monitor maximum and minimum elevations after spin-up
         if t_new >= t_end/4.:
             maximum_elevation.interpolate(conditional(ge(elev,maximum_elevation),elev,maximum_elevation))
             minimum_elevation.interpolate(conditional(le(elev,minimum_elevation),elev,minimum_elevation))
@@ -185,13 +157,11 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     solver_obj.iterate(update_forcings=update_forcings)
 
 
-"""
-Manning sensitivity script
-"""
+# Manning sensitivity
 #run the model for different Manning coefficients:
 # man = np.arange(0.02, 0.03, 0.01)
 # for mu_manning in man:
 #     tidal_simulation(mu_manning=mu_manning)
 
-mu_manning=0.02
+mu_manning = 0.02
 tidal_simulation(mu_manning=mu_manning)

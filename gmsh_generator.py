@@ -1,7 +1,7 @@
 """
-This script generates the *.geo files of simple geometries
+Generates a Gmsh .geo file and calls Gmsh to produce a 2D mesh (.msh).
 
-Below it's been configured for
+Configured below for a rectangular channel (lx × lw).
 """
 
 import os
@@ -45,8 +45,8 @@ def gmsh_generator(outline,resolution):
 
     f1.close()
 
-lx=30000 #length of channel
-lw=2000  #width of channel
+lx = 30000  # length of channel
+lw = 2000   # width of channel
 if __name__ == '__main__':
 
     # Example 1

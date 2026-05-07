@@ -37,10 +37,9 @@ df = pd.read_csv(file, names=['index', 'xcoord', 'eta_max', 'eta_min'])
 print(df)
 
 lx = 180000
-H_cases = [45,47.5,48.5,49.5,50,52.5,55]
-H_labels = ['H=45 m','H=47.5 m','H=48.5 m','H=49.5 m','H=50 m','H=52.5 m','H=55 m']
-print(df['eta_max'][0:10])
-colors = ["red", "blue" , "green", "orange", "purple", "k", "lightseagreen"]
+H_cases = [45, 47.5, 48.5, 49.5, 50, 52.5, 55]
+H_labels = ['H=45 m', 'H=47.5 m', 'H=48.5 m', 'H=49.5 m', 'H=50 m', 'H=52.5 m', 'H=55 m']
+colors = ["red", "blue", "green", "orange", "purple", "k", "lightseagreen"]
 linewidth = 0.8
 
 for j in np.arange(0, len(H_cases)):

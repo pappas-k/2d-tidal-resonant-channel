@@ -12,9 +12,7 @@ This project simulates tidal wave propagation in a closed-end rectangular channe
 
 Resonance occurs when the channel length approaches a quarter of the tidal wavelength:
 
-
 $L_{\mathrm{res}} = \frac{L}{4}$,  $\qquad L = T \sqrt{gH}$
-
 
 ---
 
@@ -63,15 +61,15 @@ Runs the tidal simulation for a given Manning coefficient and writes outputs to 
 
 Key parameters (edit inside `resonant_channel.py`):
 
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `mu_manning` | 0.02 | Manning friction coefficient |
-| `amplitude` | 2.0 m | Tidal amplitude at the open boundary |
-| `H` | 50 m | Water depth (bathymetry) |
-| `T` | 7200 s | Tidal period |
-| `lx` | 30000 m | Channel length |
-| `W` | 2000 m | Channel width |
-| `t_end` | 10 × T | Total simulation duration |
+| Parameter    | Default  | Description                          |
+|--------------|----------|--------------------------------------|
+| `mu_manning` | 0.02     | Manning friction coefficient         |
+| `amplitude`  | 2.0 m    | Tidal amplitude at the open boundary |
+| `H`          | 50 m     | Water depth (bathymetry)             |
+| `T`          | 7200 s   | Tidal period                         |
+| `lx`         | 30000 m  | Channel length                       |
+| `W`          | 2000 m   | Channel width                        |
+| `t_end`      | 10 × T   | Total simulation duration            |
 
 **3. Extract detector data**
 ```bash
@@ -97,7 +95,7 @@ Plots tidal envelope (max/min elevation) along the channel for multiple depth ca
 
 ## Output
 
-Simulation results are written to `outputs-n-<manning>-H-<depth>/`:
+Simulation results are written to `outputs-n-<n>-H-<H>/`:
 - `hdf5/` — HDF5 snapshots of elevation and velocity fields
 - `Elevation2d/`, `Velocity2d/` — VTU files for visualisation in ParaView
 - `diagnostic_detectors.hdf5` — Time series at detector locations

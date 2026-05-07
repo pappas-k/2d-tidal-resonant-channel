@@ -20,11 +20,12 @@ How to run
 11. Run detector_interpreter_min_max.py to extract min/max detector values.
 12. Run the plotter to view results (length, friction, depth, etc.).
 """
+import math
+
 import numpy as np
 from thetis import *
+
 from modules import support_functions
-import matplotlib.pyplot as plt
-import math
 
 
 def tidal_simulation(mu_manning=0.02, amplitude=2.0):
@@ -34,8 +35,7 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     :return:
     """
 
-    #T = 12.42 * 3600              # M2 tidal period
-    T = 2 * 3600                  # hypothetical period — smaller domain, faster model
+    T = 2 * 3600  # hypothetical period — smaller domain, faster model
     H = 50                       # Bathymetry (m)
     L = T * math.sqrt(9.81 * H)  # Wavelength L (m) based on celerity math.sqrt(9.81 * H)
     print("Wavelength L = ", L)
@@ -74,19 +74,10 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
 
     x, y = SpatialCoordinate(mesh2d)
     # Define constant bathymetry:
-    bathymetry_2d.assign(Constant(H))  # constant bathymetry of 50 m
-
-    # Define sloping bathymetry:
-    depth_oce = 50.0
-    depth_riv = 5.0
-    #bathymetry_2d.interpolate(depth_oce + (depth_riv - depth_oce) * x / lx)
+    bathymetry_2d.assign(Constant(H))
 
     # Viscosity sponge:
     viscosity_2d.interpolate(conditional(le(x, 2e3), 1e3 * (2e3 + 1 - x) / 2e3, 1)) #we define a viscosity sponge for x<=2000m, i.e. viscosity = 1e3 * (2e3+1 - x)/2e3, for x>2000m Viscosity=1
-
-    # Uncomment to produce a plot for the bathymetry
-    # plot(bathymetry_2d)
-    # plt.show()
 
     # Create Thetis solver object
     solver_obj = solver2d.FlowSolver2d(mesh2d, bathymetry_2d)
@@ -101,10 +92,7 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     options.swe_timestepper_type = 'CrankNicolson'
     options.timestep = 50.0
     options.use_wetting_and_drying = True
-    options.horizontal_viscosity = viscosity_2d  # include viscosity to options
-    # if not hasattr(options.timestepper_options, 'use_automatic_timestep'):
-    #     options.timestep = 10.0
-
+    options.horizontal_viscosity = viscosity_2d
 
     # Boundary and initial conditions
     tidal_elev = Constant(0)
@@ -156,12 +144,6 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
 
     solver_obj.iterate(update_forcings=update_forcings)
 
-
-# Manning sensitivity
-#run the model for different Manning coefficients:
-# man = np.arange(0.02, 0.03, 0.01)
-# for mu_manning in man:
-#     tidal_simulation(mu_manning=mu_manning)
 
 mu_manning = 0.02
 tidal_simulation(mu_manning=mu_manning)

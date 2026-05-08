@@ -64,13 +64,13 @@ def process_results(df, names, xcoord, index, color='k', label='$\\nu = 0.02$'):
         fangle = np.angle(u + v * 1j, deg=True)
         axarr[0].plot(t, eta, lw=linewidth, label=label, c=color)
         axarr[0].set_ylabel('$\eta$ (m)')
-        axarr[1].plot(t, u, lw=linewidth, label=label,c=color)
+        axarr[1].plot(t, u, lw=linewidth, label=label, c=color)
         axarr[1].set_ylabel('$u$ (m/s)')
         axarr[2].plot(t, v, lw=linewidth, label=label, c=color)
         axarr[2].set_ylabel('$v$ (m/s)')
-        axarr[3].plot(t, np.sqrt(u ** 2 + v ** 2), lw=linewidth, c=color,label=label)
+        axarr[3].plot(t, np.sqrt(u ** 2 + v ** 2), lw=linewidth, c=color, label=label)
         axarr[3].set_ylabel('$|U|$ (m/s)')
-        axarr[4].plot(t, fangle, lw=linewidth, c=color,label=label)
+        axarr[4].plot(t, fangle, lw=linewidth, c=color, label=label)
         axarr[4].set_ylabel('$\\alpha$ $^o$')
         axarr[4].set_ylim([-200, 200])
 
@@ -86,9 +86,8 @@ if __name__ == '__main__':
     L = 180000        # channel length
 
     # Reads the outputs of simulations
-    dataframes = []                           #Consider several dataframes (from different simulations)
-    n_cases = [0.02, 0.03]                    #Manning coefficient n cases to be considered
-    H_cases = [45,47.5,48.5,49.5,50,52.5,55]  #Depth H cases to be considered
+    dataframes = []
+    H_cases = [45, 47.5, 48.5, 49.5, 50, 52.5, 55]
 
     n = 0.02
     for H in H_cases:
@@ -98,12 +97,12 @@ if __name__ == '__main__':
     names = []
     N_detectors = len(list(dataframes[0].keys())) - 1
     print("Number of Detectors:", N_detectors)
-    for k in range(0, N_detectors):
+    for k in range(N_detectors):
         names.append('detector_'+str(k))
 
     for df in dataframes:
         # change the index of the names to produce the plot that you like:
-        for j in range(0, N_detectors):
+        for j in range(N_detectors):
             xcoord = float(j/N_detectors) * L # 1e4
-            process_results(df, names, xcoord, j, color='blue', )
+            process_results(df, names, xcoord, j, color='blue')
 

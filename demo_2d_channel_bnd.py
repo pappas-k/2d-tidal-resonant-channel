@@ -71,7 +71,7 @@ def timedep_flux(simulation_time):
 
     The flux is a sinusoidal tidal signal superimposed on a background inflow.
     """
-    tide_amp = -2e3       # tidal amplitude [m³/s]
+    tide_amp = -2e3  # tidal amplitude [m³/s]
     tide_t = 12 * 3600.  # tidal period [s]
     flux = tide_amp * sin(2 * pi * simulation_time / tide_t) + in_flux
     return flux

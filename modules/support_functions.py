@@ -10,8 +10,11 @@ def sinusoidal_tidal_elevation(amplitude=1, period=12.42 * 3600):
     :param period: period of tidal wave, assuming M2 period of approximately 12.42 h
     :return: elevation function for boundary
     """
-    omega = (2 * math.pi / period)
-    elevation = lambda t: amplitude * math.sin(omega * t)
+    omega = 2 * math.pi / period
+
+    def elevation(t):
+        return amplitude * math.sin(omega * t)
+
     return elevation
 
 

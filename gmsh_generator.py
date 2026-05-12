@@ -46,15 +46,11 @@ lx = 30000  # length of channel
 lw = 2000   # width of channel
 if __name__ == '__main__':
 
-    # Example 1
-    outline = [[0,0],[lx,0],[lx,lw],[0,lw]]  #insert here the boundary coordinates of the mesh
+    outline = [[0, 0], [lx, 0], [lx, lw], [0, lw]]
+    resolution = [500] * len(outline)
+    print(len(outline), resolution)
 
-    # Example 2
-    # outline = [[0,0],[140000,0],[140000,2500],[180000,2500],[180000,10000],[0,10000]] #here for the tetrix mesh
-    resolution = [500 for i in range(len(outline))]       #initial resolution was 750
-    print (len(outline), resolution)
-
-    gmsh_generator(outline,resolution)
+    gmsh_generator(outline, resolution)
 
     call(["gmsh", "mesh.geo", "-2", "mesh.msh"])
 

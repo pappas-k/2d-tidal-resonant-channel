@@ -36,20 +36,16 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     """
 
     T = 2 * 3600  # hypothetical period — smaller domain, faster model
-    H = 50                       # Bathymetry (m)
-    L = T * math.sqrt(9.81 * H)  # Wavelength L (m) based on celerity math.sqrt(9.81 * H)
+    H = 50  # bathymetry [m]
+    L = T * math.sqrt(9.81 * H)  # wavelength [m]
     print("Wavelength L = ", L)
-    lx = 30000  # L/5.5          # Channel length; take approx lx=L/5.5
-    W = 2000                     # Channel width (m)
-    w = 2 * math.pi / T          # Angular frequency
-    k = 2 * math.pi / L          # Wave number
+    lx = 30000  # channel length [m]; approx L/5.5
+    W = 2000  # channel width [m]
+    w = 2 * math.pi / T  # angular frequency [rad/s]
+    k = 2 * math.pi / L  # wave number [rad/m]
 
-    # TARGET AMPLITUDE = 4
-    # Inlet amplitude will be based on theoretical expression (based on Ippen and Eagleston)
-    eta = lambda t: 2 * amplitude * math.sin(w * t) * math.cos(k * (-lx))
-
-    # IMPORTANT THE FORCING AT THE INLET NEEDS TO BE CALCULATED BY THE MAXIMUM OF the eta function
-    forcing_amplitude = eta(T/4)  # calculate at pi/4
+    # Inlet amplitude from Ippen & Eagleston theoretical expression, evaluated at t = T/4
+    forcing_amplitude = 2 * amplitude * math.sin(w * T / 4) * math.cos(k * (-lx))
     print("forcing_amplitude=", forcing_amplitude)
 
     # Simulation parameters

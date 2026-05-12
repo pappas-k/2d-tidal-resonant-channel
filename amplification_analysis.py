@@ -42,9 +42,9 @@ H_labels = ['H=45 m', 'H=47.5 m', 'H=48.5 m', 'H=49.5 m', 'H=50 m', 'H=52.5 m', 
 colors = ["red", "blue", "green", "orange", "purple", "k", "lightseagreen"]
 linewidth = 0.8
 
-for j in np.arange(0, len(H_cases)):
+for j in range(len(H_cases)):
     i = j * 21
-    plt.plot(df['xcoord'][0:21] / lx, df['eta_max'][i:i+21], label=H_labels[j], color=colors[j], lw=linewidth)
+    plt.plot(df['xcoord'][0:21] / lx, df['eta_max'][i:i + 21], label=H_labels[j], color=colors[j], lw=linewidth)
     plt.plot(df['xcoord'][0:21] / lx, df['eta_min'][i:i + 21], color=colors[j], lw=linewidth)
 
 plt.legend()

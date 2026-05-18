@@ -26,7 +26,7 @@ def output_field_h5(output_directory, field, name):
     :param name: Name of Function to be used in the output file
     :return: none - just outputs file
     """
-    checkpoint_file = checkpointing.DumbCheckpoint(output_directory + "/" + name)
+    checkpoint_file = checkpointing.DumbCheckpoint(f'{output_directory}/{name}')
     checkpoint_file.store(field)
     checkpoint_file.close()
 

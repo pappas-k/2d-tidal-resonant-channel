@@ -53,11 +53,11 @@ def process_results(df, names, xcoord, index, color='k', label='$\\nu = 0.02$'):
 
     # Write maxima and minima to CSV for further plotting
     with open("min_max.csv", "a") as file:
-        file1 = csv.writer(file)
-        file1.writerow([index, xcoord, eta.max(), eta.min()])
+        writer = csv.writer(file)
+        writer.writerow([index, xcoord, eta.max(), eta.min()])
 
     # Plot time series at the closed end
-    if j == N_detectors-1:
+    if j == N_detectors - 1:
         # Plot initialisation
         linewidth = 0.2
         f, axarr = plt.subplots(5, sharex="all", sharey="none", figsize=(8, 6), dpi=200)
@@ -82,8 +82,8 @@ def process_results(df, names, xcoord, index, color='k', label='$\\nu = 0.02$'):
 
 
 if __name__ == '__main__':
-    q = int(5e1)      # consider results after q timesteps,
-    L = 180000        # channel length
+    q = 50      # timesteps to skip (spin-up)
+    L = 180000  # channel length [m]
 
     # Reads the outputs of simulations
     dataframes = []
@@ -91,18 +91,18 @@ if __name__ == '__main__':
 
     n = 0.02
     for H in H_cases:
-        dataframes.append(h5py.File('outputs' + "-" + "n-" + str(n) + "-" + "H-" + str(H) + '/diagnostic_detectors.hdf5', 'r'))
+        dataframes.append(h5py.File(f'outputs-n-{n}-H-{H}/diagnostic_detectors.hdf5', 'r'))
 
     # Create a list of detector names (follows on the notation used in the simulation)
     names = []
     N_detectors = len(list(dataframes[0].keys())) - 1
     print("Number of Detectors:", N_detectors)
     for k in range(N_detectors):
-        names.append('detector_'+str(k))
+        names.append('detector_' + str(k))
 
     for df in dataframes:
         # change the index of the names to produce the plot that you like:
         for j in range(N_detectors):
-            xcoord = float(j/N_detectors) * L # 1e4
+            xcoord = float(j / N_detectors) * L
             process_results(df, names, xcoord, j, color='blue')
 

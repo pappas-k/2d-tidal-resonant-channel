@@ -48,18 +48,13 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     forcing_amplitude = 2 * amplitude * math.sin(w * T / 4) * math.cos(k * (-lx))
     print("forcing_amplitude=", forcing_amplitude)
 
-    # Simulation parameters
-    # Output folder
-    outputdir = 'outputs' + "-" + "n-" + str(mu_manning) + "-" + "H-" + str(H)
-    # Mesh for simulation
+    outputdir = f'outputs-n-{mu_manning}-H-{H}'
     mesh2d = Mesh('mesh/mesh.msh')
 
-    print_output('Loaded mesh ' + mesh2d.name)
-    print_output('Exporting to ' + outputdir)
+    print_output(f'Loaded mesh {mesh2d.name}')
+    print_output(f'Exporting to {outputdir}')
 
-    # total duration in seconds
-    t_end = T * 10 # initially was *20
-    # export interval in seconds
+    t_end = T * 10
     t_export = 1000.0
 
     # Bathymetry and viscosity fields
@@ -72,8 +67,8 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     # Define constant bathymetry:
     bathymetry_2d.assign(Constant(H))
 
-    # Viscosity sponge:
-    viscosity_2d.interpolate(conditional(le(x, 2e3), 1e3 * (2e3 + 1 - x) / 2e3, 1)) #we define a viscosity sponge for x<=2000m, i.e. viscosity = 1e3 * (2e3+1 - x)/2e3, for x>2000m Viscosity=1
+    # Viscosity sponge: ramps from 1e3 at x=0 to 0 at x=2 km; 1 elsewhere
+    viscosity_2d.interpolate(conditional(le(x, 2e3), 1e3 * (2e3 + 1 - x) / 2e3, 1))
 
     # Create Thetis solver object
     solver_obj = solver2d.FlowSolver2d(mesh2d, bathymetry_2d)
@@ -100,18 +95,18 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
 
     # Detectors
     # Get equidistant points to monitor across the centreline
-    detectors_coordinates = support_functions.get_equidistant_points((0,W), (lx-1e-3,W),20)
+    detectors_coordinates = support_functions.get_equidistant_points((0, W), (lx - 1e-3, W), 20)
 
-    det_names = []  # give detector names : det_names = ['detector_1','detector_2', etc..]
+    det_names = []
     for i in range(len(detectors_coordinates)):
         det_names.append('detector_' + str(i))
-    print(det_names,detectors_coordinates)
+    print(det_names, detectors_coordinates)
 
     # Create a tidal elevation function for the open boundary
     tidal_elevation = support_functions.sinusoidal_tidal_elevation(amplitude=forcing_amplitude)
 
     # Assign initial conditions
-    solver_obj.assign_initial_conditions(elev=elev_init, uv=as_vector((1e-3, 0.0))) # Small velocity value (1e-3) is used to avoid division by 0 if friction term is included
+    solver_obj.assign_initial_conditions(elev=elev_init, uv=as_vector((1e-3, 0.0)))
 
     # Add detector callbacks (monitor points for elevations and velocities)
     cb = DetectorsCallback(solver_obj, detectors_coordinates, ['elev_2d', 'uv_2d'],
@@ -121,22 +116,22 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     uv, elev = solver_obj.timestepper.solution.split()
 
     # Track maximum and minimum field elevations
-    maximum_elevation = Function(DG_2d, name='Maximum_elevation_'+str(mu_manning)).assign(0.0)
-    minimum_elevation = Function(DG_2d, name='Minimum_elevation_'+str(mu_manning)).assign(0.0)
+    maximum_elevation = Function(DG_2d, name=f'Maximum_elevation_{mu_manning}').assign(0.0)
+    minimum_elevation = Function(DG_2d, name=f'Minimum_elevation_{mu_manning}').assign(0.0)
 
     def update_forcings(t_new):
         ramp = tanh(t_new / 10000.)
         tidal_elev.assign(Constant(tidal_elevation(t_new) * ramp))
 
         # Monitor maximum and minimum elevations after spin-up
-        if t_new >= t_end/4.:
-            maximum_elevation.interpolate(conditional(ge(elev,maximum_elevation),elev,maximum_elevation))
-            minimum_elevation.interpolate(conditional(le(elev,minimum_elevation),elev,minimum_elevation))
+        if t_new >= t_end / 4.:
+            maximum_elevation.interpolate(conditional(ge(elev, maximum_elevation), elev, maximum_elevation))
+            minimum_elevation.interpolate(conditional(le(elev, minimum_elevation), elev, minimum_elevation))
 
-        if t_new == int(t_end/options.timestep) * options.timestep:
-            support_functions.output_field_h5(outputdir,maximum_elevation,'Maximum_Elevation')
-            support_functions.output_field_h5(outputdir,minimum_elevation,'Minimum_Elevation')
-            File(outputdir+'/max_min.pvd').write(maximum_elevation,minimum_elevation)
+        if t_new == int(t_end / options.timestep) * options.timestep:
+            support_functions.output_field_h5(outputdir, maximum_elevation, 'Maximum_Elevation')
+            support_functions.output_field_h5(outputdir, minimum_elevation, 'Minimum_Elevation')
+            File(f'{outputdir}/max_min.pvd').write(maximum_elevation, minimum_elevation)
 
     solver_obj.iterate(update_forcings=update_forcings)
 

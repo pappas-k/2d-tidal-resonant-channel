@@ -44,12 +44,12 @@ def process_results(df, names, xcoord, index, color='k', label='$\\nu = 0.02$'):
     :param label: plot label
     :return:
     """
-    t = np.array(df['time'][:, 0])[q:]    # t is the time
-    eta = df[names[index]][:, 0][q:]      # eta is the elevation here
-    u = df[names[index]][:, 1][q:]        # u  is the horizontal velocity component here
-    v = df[names[index]][:, 2][q:]        # v is the transverse velocity component here
+    t = np.array(df['time'][:, 0])[q:]
+    eta = df[names[index]][:, 0][q:]
+    u = df[names[index]][:, 1][q:]
+    v = df[names[index]][:, 2][q:]
 
-    print('x-coordinate, max , min :', "{:.1f}".format(xcoord), "{:.3f}".format(eta.max()), "{:.3f}".format(eta.min()))
+    print(f'x-coordinate, max, min: {xcoord:.1f}  {eta.max():.3f}  {eta.min():.3f}')
 
     # Write maxima and minima to CSV for further plotting
     with open("min_max.csv", "a") as file:
@@ -95,7 +95,7 @@ if __name__ == '__main__':
 
     # Create a list of detector names (follows on the notation used in the simulation)
     names = []
-    N_detectors = len(list(dataframes[0].keys())) - 1
+    N_detectors = len(dataframes[0].keys()) - 1
     print("Number of Detectors:", N_detectors)
     for k in range(N_detectors):
         names.append('detector_' + str(k))

@@ -63,7 +63,7 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     bathymetry_2d = Function(P1_2d, name='Bathymetry')
     viscosity_2d = Function(P1_2d, name='viscosity')
 
-    x, y = SpatialCoordinate(mesh2d)
+    x, _ = SpatialCoordinate(mesh2d)
     # Define constant bathymetry:
     bathymetry_2d.assign(Constant(H))
 
@@ -97,9 +97,7 @@ def tidal_simulation(mu_manning=0.02, amplitude=2.0):
     # Get equidistant points to monitor across the centreline
     detectors_coordinates = support_functions.get_equidistant_points((0, W), (lx - 1e-3, W), 20)
 
-    det_names = []
-    for i in range(len(detectors_coordinates)):
-        det_names.append('detector_' + str(i))
+    det_names = [f'detector_{i}' for i in range(len(detectors_coordinates))]
     print(det_names, detectors_coordinates)
 
     # Create a tidal elevation function for the open boundary
